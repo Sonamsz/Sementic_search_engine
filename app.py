@@ -160,31 +160,35 @@ def search_products(query: str, top_k: int = 20) -> pd.DataFrame:
 
 
 def _extract_image_url(image_value: Any) -> str:
+    url = ""
     if image_value is None:
-        return ""
-    if isinstance(image_value, list):
-        return str(image_value[0]) if image_value else ""
-    text = str(image_value).strip()
-    if not text:
-        return ""
-    try:
-        parsed = json.loads(text)
-        if isinstance(parsed, list) and parsed:
-            return str(parsed[0])
-    except Exception:
-        pass
-    try:
-        parsed = ast.literal_eval(text)
-        if isinstance(parsed, list) and parsed:
-            return str(parsed[0])
-    except Exception:
-        pass
-    
-    # Fallback to manual string cleaning
-    cleaned = text.replace('[', '').replace(']', '').replace('"', '').replace("'", "")
-    url = cleaned.split(',')[0].strip()
-    
-    if "flixcart.com" in url or "flipkart.com" in url or not url:
+        url = ""
+    elif isinstance(image_value, list):
+        url = str(image_value[0]) if image_value else ""
+    else:
+        text = str(image_value).strip()
+        if text:
+            parsed_ok = False
+            try:
+                parsed = json.loads(text)
+                if isinstance(parsed, list) and parsed:
+                    url = str(parsed[0])
+                    parsed_ok = True
+            except Exception:
+                pass
+            if not parsed_ok:
+                try:
+                    parsed = ast.literal_eval(text)
+                    if isinstance(parsed, list) and parsed:
+                        url = str(parsed[0])
+                        parsed_ok = True
+                except Exception:
+                    pass
+            if not parsed_ok:
+                cleaned = text.replace('[', '').replace(']', '').replace('"', '').replace("'", "")
+                url = cleaned.split(',')[0].strip()
+
+    if not url or "flixcart.com" in url or "flipkart.com" in url:
         return "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIiB2aWV3Qm94PSIwIDAgMzAwIDMwMCI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiNmOGZhZmMiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM2NDc0OGIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=="
     return url
 
