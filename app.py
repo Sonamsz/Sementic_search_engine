@@ -182,7 +182,11 @@ def _extract_image_url(image_value: Any) -> str:
     
     # Fallback to manual string cleaning
     cleaned = text.replace('[', '').replace(']', '').replace('"', '').replace("'", "")
-    return cleaned.split(',')[0].strip()
+    url = cleaned.split(',')[0].strip()
+    
+    if "flixcart.com" in url or not url:
+        return "https://placehold.co/300x300/f8fafc/64748b.png?text=No+Image"
+    return url
 
 
 def display_results(results: pd.DataFrame) -> None:
@@ -218,7 +222,7 @@ def display_results(results: pd.DataFrame) -> None:
             card_html = f"""<div class="premium-card fade-in" style="animation-delay: {min(i * 0.05, 0.5)}s">
 <div class="card-image-container">
 {badge_html}
-<img class="card-image" src="{image_url}" alt="{product_name}" onerror="this.onerror=null; this.src='https://placehold.co/300x300/f8fafc/64748b.png?text=No+Image'" />
+<img class="card-image" src="{image_url}" alt="{product_name}" />
 </div>
 <div class="card-content">
 <div class="product-brand">PREMIUM</div>
