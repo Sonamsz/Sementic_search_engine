@@ -229,7 +229,7 @@ def display_results(results: pd.DataFrame) -> None:
             card_html = f"""<div class="premium-card fade-in" style="animation-delay: {min(i * 0.05, 0.5)}s">
 <div class="card-image-container">
 {badge_html}
-<img class="card-image" src="{image_url}" alt="{product_name}" />
+<img class="card-image" src="{image_url}" alt="{product_name}" referrerpolicy="no-referrer" />
 </div>
 <div class="card-content">
 <div class="product-brand">PREMIUM</div>
