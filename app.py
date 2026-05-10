@@ -184,7 +184,7 @@ def _extract_image_url(image_value: Any) -> str:
     cleaned = text.replace('[', '').replace(']', '').replace('"', '').replace("'", "")
     url = cleaned.split(',')[0].strip()
     
-    if "flixcart.com" in url or not url:
+    if "flixcart.com" in url or "flipkart.com" in url or not url:
         return "https://placehold.co/300x300/f8fafc/64748b.png?text=No+Image"
     return url
 
