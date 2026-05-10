@@ -1,0 +1,6 @@
+{
+  "model_name": "all-MiniLM-L6-v2",
+  "ndcg_score": 0.3935,
+  "best_alpha": 0.5,
+  "eval_k": 10
+}
